@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import com.fullstackangular.api.entities.Categoria;
 import com.fullstackangular.api.repository.CategoriaRepository;
 
-import javassist.NotFoundException;
-
 @Service
 public class CategoriaService {
 
@@ -25,9 +23,9 @@ public class CategoriaService {
 		Categoria categoriaNova = new Categoria(null, categoria.getNome());
 		return repo.save(categoriaNova);
 	}
-	
-	public Categoria encontrarCategoriaPorCodigo(Long codigo) {
-		Optional<Categoria>  categoriaEncontrada = repo.findById(codigo);
-		return categoriaEncontrada.get();
-	} 
+
+	public Optional<Categoria> encontrarCategoriaPorCodigo(Long codigo) {
+		Optional<Categoria> categoriaEncontrada = repo.findById(codigo);
+		return categoriaEncontrada;
+	}
 }

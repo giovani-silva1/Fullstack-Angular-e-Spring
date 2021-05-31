@@ -1,6 +1,7 @@
 package com.fullstackangular.api.resources;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +31,15 @@ public class CategoriaResource {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Categoria> inserirCategoria(@RequestBody Categoria categoria) {
 		Categoria categoriaInserida = categoriaService.criar(categoria);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{codigo}")
 				.buildAndExpand(categoriaInserida.getCodigo()).toUri();
 		return ResponseEntity.created(uri).body(categoriaInserida);
 	}
 
 	@RequestMapping(value = "/{codigo}", method = RequestMethod.GET)
-	public ResponseEntity<Categoria> encontrarCategoriaPorCodigo(@PathVariable Long codigo) {
-		return ResponseEntity.ok().body(categoriaService.encontrarCategoriaPorCodigo(codigo));
+	public ResponseEntity<Optional<Categoria>> encontrarCategoriaPorCodigo(@PathVariable Long codigo) {
+		Optional<Categoria> categoriaEncontrada = categoriaService.encontrarCategoriaPorCodigo(codigo);
+		return categoriaEncontrada.isPresent() ? ResponseEntity.ok().body(categoriaEncontrada)
+				: ResponseEntity.notFound().build();
 	}
 }
